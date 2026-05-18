@@ -6,6 +6,8 @@ import com.intellij.notification.NotificationType
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
+import com.intellij.openapi.components.service
+import com.intellij.openapi.wm.ToolWindowManager
 
 class KoraSafeScanAction : AnAction() {
     private val analyzer = Analyzer()
@@ -16,6 +18,10 @@ class KoraSafeScanAction : AnAction() {
         val document = editor?.document ?: return
         val languageId = event.getData(CommonDataKeys.PSI_FILE)?.language?.id?.lowercase() ?: "text"
         val result = analyzer.analyzeCode(document.text, languageId)
+        val fileName = event.getData(CommonDataKeys.PSI_FILE)?.name ?: "Current file"
+
+        project.service<KoraSafeFindingStore>().update(fileName, result)
+        ToolWindowManager.getInstance(project).getToolWindow("KoraSafe")?.show()
 
         NotificationGroupManager.getInstance()
             .getNotificationGroup("KoraSafe")
