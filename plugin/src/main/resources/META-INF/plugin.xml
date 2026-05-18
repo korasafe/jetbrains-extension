@@ -4,18 +4,67 @@
     <vendor email="Contact-us@korasafe.ai" url="https://korasafe.ai">KoraSafe</vendor>
 
     <description><![CDATA[
-        <p>KoraSafe Governance brings local AI governance checks into JetBrains IDEs for agent code, LLM usage, policy files, and cloud-check workflows.</p>
+        <p>
+          KoraSafe Governance runs AI-specific governance checks every time you save.
+          It catches the patterns that block a regulated launch: leaked API keys, PII
+          in prompts, LLM calls shipped without error handling, destructive actions
+          without a human approval gate, missing rate limits on routes that hit an LLM.
+        </p>
+
+        <p>
+          Part of <a href="https://korasafe.ai">KoraSafe</a>, the AI governance
+          intelligence platform for compliance, security, and GRC teams.
+        </p>
+
+        <h3>What it catches</h3>
         <ul>
-            <li>Scan project files for governance findings and regulation references.</li>
-            <li>Load workspace rules manifests and <code>.korasafe/policy.yaml</code> configuration.</li>
-            <li>Gate cloud checks on project trust, API-key configuration, and telemetry opt-in.</li>
+          <li><b>Secrets.</b> Anthropic, OpenAI, AWS, GitHub, Slack, JWT tokens, and hardcoded credential strings.</li>
+          <li><b>PII.</b> Social Security numbers, credit card numbers, emails, phone numbers in code literals.</li>
+          <li><b>LLM calls.</b> Direct SDK calls to Anthropic, OpenAI, Bedrock, Vertex, Cohere, and generic <code>client.invoke</code> / <code>model.generate</code> patterns.</li>
+          <li><b>Destructive actions.</b> <code>execute()</code>, database <code>.delete()</code>, deploys, file writes, network <code>.send()</code> patterns.</li>
+          <li><b>Missing human-in-the-loop gates.</b> Flags destructive actions that ship without an approval or consent path nearby.</li>
+          <li><b>Missing error handling.</b> LLM calls outside a <code>try</code>/<code>catch</code> wrapper.</li>
+          <li><b>Missing rate limits.</b> API endpoints that hit an LLM without any rate-limit primitive in scope.</li>
         </ul>
+
+        <h3>Where findings show up</h3>
+        <ul>
+          <li>KoraSafe tool window on the right rail, grouped by severity.</li>
+          <li>Inline inspections that underline the offending range and surface in the Problems tool window.</li>
+          <li>Intention actions on Alt+Enter (Option+Return on macOS) with quick fixes and regulation references.</li>
+        </ul>
+
+        <h3>Cloud governance (opt-in)</h3>
+        <p>
+          Set an API key and the plugin layers regulation mapping (EU AI Act, GDPR, NIST AI RMF), organization policy
+          sync, and evidence-bundle export on top of the local checks. Cloud checks are off by default. A confirmation
+          dialog runs before the first cloud call. Files above the configured size limit are skipped. Untrusted
+          projects never trigger cloud checks regardless of settings.
+        </p>
+
+        <h3>Supported IDEs</h3>
+        <p>
+          IntelliJ IDEA, PyCharm, WebStorm, GoLand, RubyMine, AppCode. Baseline platform IntelliJ 2024.2
+          (<code>since-build=242</code>).
+        </p>
+
+        <h3>Privacy</h3>
+        <p>
+          Nothing leaves your machine by default. Cloud checks and telemetry are both opt-in. Read the
+          <a href="https://korasafe.ai/privacy/jetbrains-extension">privacy policy</a> before enabling either.
+        </p>
     ]]></description>
 
     <change-notes><![CDATA[
+        <h3>0.2.0</h3>
         <ul>
-            <li>Initial JetBrains v1.0 compatibility build for IntelliJ Platform 2024.2 IDEs.</li>
-            <li>Adds analyzer, policy, rules manifest, cloud-check, and MCP client foundations.</li>
+          <li>First public release on JetBrains Marketplace.</li>
+          <li>Local governance rules: secrets, PII, LLM calls, destructive actions, missing HITL gates, missing error handling, missing rate limits.</li>
+          <li>KoraSafe tool window, inline inspections, intention actions.</li>
+          <li>Opt-in cloud checks with EU AI Act, GDPR, NIST AI RMF regulation mapping.</li>
+          <li>Local MCP server for MCP-capable assistants.</li>
+          <li>Signed evidence-bundle export.</li>
+          <li>OTLP trace export.</li>
         </ul>
     ]]></change-notes>
 
