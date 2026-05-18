@@ -5,7 +5,10 @@ plugins {
 
 allprojects {
     group = "ai.korasafe"
-    version = "0.1.0"
+    version = providers.gradleProperty("pluginVersion")
+        .orElse(providers.environmentVariable("PLUGIN_VERSION"))
+        .orElse("0.1.0")
+        .get()
 }
 
 subprojects {
