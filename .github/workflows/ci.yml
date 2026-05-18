@@ -23,4 +23,47 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: 8.10.2
-      - run: gradle build test --no-daemon --stacktrace
+      - run: gradle check buildPlugin --no-daemon --stacktrace
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jetbrains-plugin-jdk-${{ matrix.java }}
+          path: |
+            plugin/build/distributions/*.zip
+            plugin/build/reports/**
+            plugin/build/verificationReports/**
+          if-no-files-found: ignore
+
+  verify-plugin:
+    name: Plugin Verifier (${{ matrix.ide }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ide:
+          - idea-community
+          - idea-ultimate
+          - pycharm-community
+          - pycharm-professional
+          - webstorm
+          - goland
+          - rubymine
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.10.2
+      - run: gradle buildPlugin verifyPlugin -PkorasafeVerifyIde=${{ matrix.ide }} --no-daemon --stacktrace
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jetbrains-verifier-${{ matrix.ide }}
+          path: |
+            plugin/build/distributions/*.zip
+            plugin/build/reports/**
+            plugin/build/verificationReports/**
+          if-no-files-found: ignore

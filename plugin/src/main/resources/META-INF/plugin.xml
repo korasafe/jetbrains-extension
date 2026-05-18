@@ -4,9 +4,20 @@
     <vendor email="Contact-us@korasafe.ai" url="https://korasafe.ai">KoraSafe</vendor>
 
     <description><![CDATA[
-        KoraSafe governance checks for AI agent code in JetBrains IDEs.
-        Supported IDEs: IntelliJ IDEA, PyCharm, WebStorm, GoLand, RubyMine, AppCode.
+        <p>KoraSafe Governance brings local AI governance checks into JetBrains IDEs for agent code, LLM usage, policy files, and cloud-check workflows.</p>
+        <ul>
+            <li>Scan project files for governance findings and regulation references.</li>
+            <li>Load workspace rules manifests and <code>.korasafe/policy.yaml</code> configuration.</li>
+            <li>Gate cloud checks on project trust, API-key configuration, and telemetry opt-in.</li>
+        </ul>
     ]]></description>
+
+    <change-notes><![CDATA[
+        <ul>
+            <li>Initial JetBrains v1.0 compatibility build for IntelliJ Platform 2024.2 IDEs.</li>
+            <li>Adds analyzer, policy, rules manifest, cloud-check, and MCP client foundations.</li>
+        </ul>
+    ]]></change-notes>
 
     <idea-version since-build="242" until-build="243.*"/>
 
