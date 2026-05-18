@@ -1,0 +1,25 @@
+<idea-plugin>
+    <id>ai.korasafe.jetbrains</id>
+    <name>KoraSafe Governance</name>
+    <vendor email="Contact-us@korasafe.ai" url="https://korasafe.ai">KoraSafe</vendor>
+
+    <description><![CDATA[
+        KoraSafe governance checks for AI agent code in JetBrains IDEs.
+        Supported IDEs: IntelliJ IDEA, PyCharm, WebStorm, GoLand, RubyMine, AppCode.
+    ]]></description>
+
+    <idea-version since-build="242" until-build="243.*"/>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <notificationGroup id="KoraSafe" displayType="BALLOON"/>
+    </extensions>
+
+    <actions>
+        <action id="KoraSafe.ScanCurrentFile"
+                class="ai.korasafe.plugin.KoraSafeScanAction"
+                text="KoraSafe: Scan Current File"
+                description="Run KoraSafe governance checks on the current file"/>
+    </actions>
+</idea-plugin>
