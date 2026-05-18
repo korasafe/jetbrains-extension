@@ -8,4 +8,14 @@ class PluginSmokeTest {
     fun actionCanBeConstructed() {
         assertNotNull(KoraSafeScanAction())
     }
+
+    @Test
+    fun inspectionCanBeConstructed() {
+        assertNotNull(KoraSafeInspection())
+    }
+
+    @Test
+    fun intentionCanBeConstructed() {
+        assertNotNull(KoraSafeIntentionAction())
+    }
 }
