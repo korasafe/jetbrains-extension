@@ -76,7 +76,7 @@
         <notificationGroup id="KoraSafe" displayType="BALLOON"/>
         <toolWindow id="KoraSafe"
                     anchor="right"
-                    factoryClass="ai.korasafe.plugin.KoraSafeToolWindowFactory"/>
+                    factoryClass="ai.korasafe.plugin.toolwindow.KoraSafeToolWindowFactory"/>
         <localInspection implementationClass="ai.korasafe.plugin.KoraSafeInspection"
                          shortName="KoraSafeGovernance"
                          displayName="KoraSafe governance findings"
@@ -86,12 +86,43 @@
         <intentionAction>
             <className>ai.korasafe.plugin.KoraSafeIntentionAction</className>
         </intentionAction>
+        <annotator language="JAVA" implementationClass="ai.korasafe.plugin.KoraSafeFindingAnnotator"/>
+        <annotator language="JavaScript" implementationClass="ai.korasafe.plugin.KoraSafeFindingAnnotator"/>
+        <annotator language="TypeScript" implementationClass="ai.korasafe.plugin.KoraSafeFindingAnnotator"/>
+        <annotator language="Python" implementationClass="ai.korasafe.plugin.KoraSafeFindingAnnotator"/>
+        <annotator language="go" implementationClass="ai.korasafe.plugin.KoraSafeFindingAnnotator"/>
+        <annotator language="Ruby" implementationClass="ai.korasafe.plugin.KoraSafeFindingAnnotator"/>
+        <annotator language="kotlin" implementationClass="ai.korasafe.plugin.KoraSafeFindingAnnotator"/>
     </extensions>
 
     <actions>
+        <action id="KoraSafe.InitWorkspace"
+                class="ai.korasafe.plugin.actions.KoraSafeInitWorkspaceAction"
+                text="KoraSafe: Init Workspace"
+                description="Initialize KoraSafe policy, rules manifest, MCP, and telemetry settings"/>
         <action id="KoraSafe.ScanCurrentFile"
                 class="ai.korasafe.plugin.KoraSafeScanAction"
                 text="KoraSafe: Scan Current File"
                 description="Run KoraSafe governance checks on the current file"/>
+        <action id="KoraSafe.ScanWorkspace"
+                class="ai.korasafe.plugin.actions.KoraSafeScanWorkspaceAction"
+                text="KoraSafe: Scan Workspace"
+                description="Run KoraSafe governance checks across the workspace"/>
+        <action id="KoraSafe.GeneratePrReport"
+                class="ai.korasafe.plugin.actions.KoraSafeGeneratePrReportAction"
+                text="KoraSafe: Generate PR Report"
+                description="Generate a KoraSafe PR governance report"/>
+        <action id="KoraSafe.TraceAgentRun"
+                class="ai.korasafe.plugin.actions.KoraSafeTraceAgentRunAction"
+                text="KoraSafe: Trace Agent Run"
+                description="Export an OpenTelemetry-ready trace for the selected agent run"/>
+        <action id="KoraSafe.ExportEvidenceBundle"
+                class="ai.korasafe.plugin.actions.KoraSafeExportEvidenceBundleAction"
+                text="KoraSafe: Export Evidence Bundle"
+                description="Export a local evidence bundle for current KoraSafe findings"/>
+        <action id="KoraSafe.ConnectMcp"
+                class="ai.korasafe.plugin.actions.KoraSafeConnectMcpAction"
+                text="KoraSafe: Connect MCP"
+                description="Connect the JetBrains plugin to the local KoraSafe MCP server"/>
     </actions>
 </idea-plugin>
