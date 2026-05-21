@@ -53,4 +53,5 @@ fun defaultDetectors(): List<RuleDetector> =
         AutonomyTierDetector(),
         UnsafeEvalDetector(),
         MissingRateLimitDetector(),
+        UnpinnedAiDependencyDetector(),
     )
