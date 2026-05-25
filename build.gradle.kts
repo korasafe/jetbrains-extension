@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm") apply false
     id("org.jetbrains.intellij.platform") apply false
+    id("org.owasp.dependencycheck") version "10.0.4"
 }
 
 allprojects {
@@ -12,7 +13,18 @@ allprojects {
 }
 
 subprojects {
+    apply(plugin = "org.owasp.dependencycheck")
+
     tasks.withType<Test>().configureEach {
         useJUnitPlatform()
+    }
+
+    extensions.configure<org.owasp.dependencycheck.gradle.extension.DependencyCheckExtension>("dependencyCheck") {
+        failBuildOnCVSS = 7.0f
+        formats = listOf("HTML", "JSON")
+        suppressionFile = rootProject.layout.projectDirectory.file("gradle/dependency-check-suppressions.xml").asFile.absolutePath
+        analyzers.assemblyEnabled = false
+        analyzers.nodeAuditEnabled = false
+        analyzers.nodePackageSkipDevDependencies = false
     }
 }
