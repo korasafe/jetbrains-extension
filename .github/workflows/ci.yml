@@ -20,10 +20,10 @@ jobs:
         with:
           distribution: temurin
           java-version: ${{ matrix.java }}
+      - uses: gradle/actions/wrapper-validation@v4
       - uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: 8.10.2
-      - run: gradle check buildPlugin --no-daemon --stacktrace
+      - name: Run check + plugin build
+        run: ./gradlew check buildPlugin --no-daemon --stacktrace
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -54,10 +54,9 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
+      - uses: gradle/actions/wrapper-validation@v4
       - uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: 8.10.2
-      - run: gradle buildPlugin verifyPlugin -PkorasafeVerifyIde=${{ matrix.ide }} --no-daemon --stacktrace
+      - run: ./gradlew buildPlugin verifyPlugin -PkorasafeVerifyIde=${{ matrix.ide }} --no-daemon --stacktrace
       - uses: actions/upload-artifact@v4
         if: always()
         with:

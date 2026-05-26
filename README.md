@@ -137,6 +137,14 @@ The multi-IDE QA and Marketplace publish runbook lives in `docs/qa/jetbrains-mul
 
 Pull requests run Gradle checks, package the plugin, run IntelliJ Plugin Verifier, and upload plugin artifacts. Marketplace publishing is tag-gated on `jetbrains-v*` through `.github/workflows/publish.yml` and requires Anwesa to configure the JetBrains Marketplace publisher account plus repository secrets.
 
+Dependency audit cadence:
+
+- Every pull request and `main` push runs on GitHub-hosted Temurin JDK 17 and 21 runners.
+- CI validates the committed Gradle wrapper, including the pinned `gradle-8.10-bin.zip` distribution checksum.
+- CI runs `./gradlew check dependencyCheckAnalyze buildPlugin`; the OWASP dependency audit fails the build for CVSS 7.0+ findings.
+- Suppressions belong in `gradle/dependency-check-suppressions.xml` only after security review, and each suppression should be narrowly scoped and time-bound.
+- Refresh Gradle wrapper checksums and dependency verification or lock metadata whenever Gradle, Kotlin, IntelliJ Platform, or runtime dependencies change.
+
 ## Support
 
 - Platform docs: https://korasafe.ai
