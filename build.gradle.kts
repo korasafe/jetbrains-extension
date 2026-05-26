@@ -25,6 +25,10 @@ subprojects {
         suppressionFile = rootProject.layout.projectDirectory.file("gradle/dependency-check-suppressions.xml").asFile.absolutePath
         analyzers.assemblyEnabled = false
         analyzers.nodeAuditEnabled = false
-        nvd.apiKey = System.getenv("NVD_API_KEY") ?: ""
+        // NVD API key intentionally not set in the DSL — the Kotlin DSL
+        // `nvd.apiKey` path didn't actually wire the value to the plugin
+        // at runtime. Use `-Dnvd.api.key=$NVD_API_KEY` on the Gradle
+        // command line OR set `DEPENDENCYCHECK_NVD_API_KEY` in the env
+        // (the cve-audit.yml workflow does both as belt-and-suspenders).
     }
 }
