@@ -25,5 +25,6 @@ subprojects {
         suppressionFile = rootProject.layout.projectDirectory.file("gradle/dependency-check-suppressions.xml").asFile.absolutePath
         analyzers.assemblyEnabled = false
         analyzers.nodeAuditEnabled = false
+        nvd.apiKey = providers.environmentVariable("NVD_API_KEY").orNull
     }
 }
