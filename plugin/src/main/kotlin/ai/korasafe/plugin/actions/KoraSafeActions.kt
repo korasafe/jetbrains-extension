@@ -9,6 +9,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.openapi.vfs.VirtualFile
 
 class KoraSafeInitWorkspaceAction : AnAction() {
@@ -21,7 +22,9 @@ class KoraSafeScanWorkspaceAction : AnAction() {
     override fun actionPerformed(event: AnActionEvent) {
         val project = event.project ?: return
         val roots = event.getData(CommonDataKeys.VIRTUAL_FILE_ARRAY)?.asSequence()
-            ?: project.baseDir?.let { sequenceOf(it) }
+            ?: project.basePath
+                ?.let { LocalFileSystem.getInstance().findFileByPath(it) }
+                ?.let { sequenceOf(it) }
             ?: emptySequence()
         val files = roots.flatMap(::walkFiles)
         val summary = project.service<KoraSafePluginService>().scanWorkspace(files)
