@@ -8,7 +8,7 @@ allprojects {
     group = "ai.korasafe"
     version = providers.gradleProperty("pluginVersion")
         .orElse(providers.environmentVariable("PLUGIN_VERSION"))
-        .orElse("0.2.1")
+        .orElse("0.2.2")
         .get()
 }
 

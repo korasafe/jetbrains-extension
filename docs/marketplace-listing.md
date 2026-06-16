@@ -11,7 +11,7 @@ Companion to the plugin's `plugin.xml` description and the root `README.md`. Hol
 - **Vendor URL**: https://korasafe.ai
 - **Since-build**: 242 (IntelliJ Platform 2024.2)
 - **Until-build**: 253.\* (IntelliJ Platform 2025.3)
-- **Version**: 0.2.1 (matches Gradle `version` for tag-based releases)
+- **Version**: 0.2.2 (matches Gradle `version` for tag-based releases)
 
 ## Tags
 
@@ -97,10 +97,15 @@ The marketplace listing renders the HTML in the `<description>` CDATA block. Rep
 
 ## Change notes (rendered in `<change-notes>`)
 
-Maintained in plugin.xml. Latest v0.2.1 compatibility release notes below; subsequent releases append.
+Maintained in plugin.xml. Latest v0.2.2 compatibility release notes below; subsequent releases append.
 
 ```html
 <![CDATA[
+<h3>0.2.2</h3>
+<ul>
+  <li>Removes deprecated IntelliJ Platform API usage from workspace scans.</li>
+</ul>
+
 <h3>0.2.1</h3>
 <ul>
   <li>Expands IDE compatibility through IntelliJ Platform build 253.</li>
@@ -139,7 +144,7 @@ Pick all that apply in the Marketplace listing form:
 ## Marketplace publish flow
 
 1. Anwesa signs in to the JetBrains Marketplace at https://plugins.jetbrains.com with a JetBrains account.
-2. Click Upload Plugin, select the `plugin-0.2.1.zip` artifact built by Gradle.
+2. Click Upload Plugin, select the `plugin-0.2.2.zip` artifact built by Gradle.
 3. Confirm metadata: it auto-populates from `plugin.xml`. Cross-check against this doc.
 4. Set the privacy URL to `https://korasafe.ai/privacy/jetbrains-extension`.
 5. Add the screenshots from the in-repo `docs/screenshots/` directory once they exist (handoff to design after the listing is approved).
