@@ -56,6 +56,11 @@
     ]]></description>
 
     <change-notes><![CDATA[
+        <h3>0.2.1</h3>
+        <ul>
+          <li>Expands IDE compatibility through IntelliJ Platform build 253.</li>
+        </ul>
+
         <h3>0.2.0</h3>
         <ul>
           <li>First public release on JetBrains Marketplace.</li>
@@ -68,7 +73,7 @@
         </ul>
     ]]></change-notes>
 
-    <idea-version since-build="242" until-build="243.*"/>
+    <idea-version since-build="242" until-build="253.*"/>
 
     <depends>com.intellij.modules.platform</depends>
 

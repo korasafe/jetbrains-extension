@@ -44,7 +44,7 @@ intellijPlatform {
 
         ideaVersion {
             sinceBuild = "242"
-            untilBuild = provider { "243.*" }
+            untilBuild = provider { "253.*" }
         }
 
         vendor {
