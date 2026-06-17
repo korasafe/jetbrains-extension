@@ -20,6 +20,11 @@ data class CloudCheckFile(
     val content: String,
 )
 
+data class CodeDiscoveryOutcome(
+    val discoveryId: String?,
+    val suggestion: String?,
+)
+
 interface CloudTransport {
     suspend fun postJson(path: String, apiKey: String, payload: Map<String, Any?>): String?
     suspend fun getJson(path: String, apiKey: String): String?
@@ -82,6 +87,38 @@ class CloudCheckClient(
         val findingsResponse = transport.getJson("/api/audit/findings?run_id=$runId&limit=100", settings.apiKey)
             ?: return emptyList()
         return mapper.readTree(findingsResponse).findings().map(::toFinding)
+    }
+
+    /**
+     * Report dependency manifests to the Shadow AI code-discovery endpoint.
+     * Best-effort: returns null (never throws) when empty, untrusted, or on a
+     * transport error, so a discovery failure can't break a save/scan.
+     */
+    suspend fun reportCodeDiscovery(
+        files: List<CloudCheckFile>,
+        settings: CloudSettings,
+        workspaceId: String,
+        language: String = "other",
+        extensionVersion: String? = null,
+    ): CodeDiscoveryOutcome? {
+        if (files.isEmpty()) return null
+        if (!evaluateCloudCheckTrust(settings).allowed) return null
+
+        val payload = mapOf(
+            "workspace_id" to workspaceId,
+            "event_type" to "workspace_scan",
+            "extension_version" to extensionVersion,
+            "language" to language,
+            "dependencies" to emptyList<Any?>(),
+            "detected_models" to emptyList<Any?>(),
+            "files" to files.map { mapOf("path" to it.path, "content" to it.content) },
+        )
+        val response = transport.postJson("/api/v2/discovery/code", settings.apiKey, payload) ?: return null
+        val root = mapper.readTree(response)
+        return CodeDiscoveryOutcome(
+            discoveryId = root.textOrNull("discovery_id"),
+            suggestion = root.textOrNull("suggestion"),
+        )
     }
 
     private suspend fun pollRun(runId: String, apiKey: String): String? {

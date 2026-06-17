@@ -78,6 +78,38 @@ class CloudCheckClientTest {
         assertEquals("cloud", findings.single().rule)
         assertEquals("Remote finding", findings.single().message)
     }
+
+    @Test
+    fun reportsCodeDiscoveryManifestsToDiscoveryEndpoint() = kotlinx.coroutines.test.runTest {
+        val transport = RecordingTransport(postResponse = """{"discovery_id":"disc-1","suggestion":"register"}""")
+        val client = CloudCheckClient(transport)
+        val settings = CloudSettings(apiKey = "ks_test", enableCloudChecks = true, workspaceTrusted = true)
+
+        val outcome = client.reportCodeDiscovery(
+            files = listOf(CloudCheckFile("package.json", """{"dependencies":{"openai":"^4"}}""")),
+            settings = settings,
+            workspaceId = "risk-service",
+            language = "typescript",
+        )
+
+        assertEquals("/api/v2/discovery/code", transport.posts.single().path)
+        assertEquals("risk-service", transport.posts.single().payload["workspace_id"])
+        assertEquals("workspace_scan", transport.posts.single().payload["event_type"])
+        assertEquals("disc-1", outcome?.discoveryId)
+        assertEquals("register", outcome?.suggestion)
+    }
+
+    @Test
+    fun skipsCodeDiscoveryWhenEmptyOrUntrusted() = kotlinx.coroutines.test.runTest {
+        val transport = RecordingTransport(postResponse = """{"discovery_id":"disc-1"}""")
+        val client = CloudCheckClient(transport)
+        val trusted = CloudSettings(apiKey = "ks_test", enableCloudChecks = true, workspaceTrusted = true)
+        val untrusted = CloudSettings(apiKey = "ks_test", enableCloudChecks = true, workspaceTrusted = false)
+
+        assertEquals(null, client.reportCodeDiscovery(emptyList(), trusted, "ws"))
+        assertEquals(null, client.reportCodeDiscovery(listOf(CloudCheckFile("package.json", "{}")), untrusted, "ws"))
+        assertTrue(transport.posts.isEmpty())
+    }
 }
 
 private data class RequestRecord(
