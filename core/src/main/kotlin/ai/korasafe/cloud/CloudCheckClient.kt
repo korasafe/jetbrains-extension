@@ -14,6 +14,7 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.content.TextContent
+import kotlinx.coroutines.runBlocking
 
 data class CloudCheckFile(
     val path: String,
@@ -57,6 +58,26 @@ class KtorCloudTransport(
         return response.body()
     }
 }
+
+fun defaultCloudCheckClient(settings: CloudSettings): CloudCheckClient =
+    CloudCheckClient(KtorCloudTransport(HttpClient(), settings.apiUrl))
+
+fun CloudCheckClient.reportCodeDiscoveryBlocking(
+    files: List<CloudCheckFile>,
+    settings: CloudSettings,
+    workspaceId: String,
+    language: String = "other",
+    extensionVersion: String? = null,
+): CodeDiscoveryOutcome? =
+    runBlocking {
+        reportCodeDiscovery(
+            files = files,
+            settings = settings,
+            workspaceId = workspaceId,
+            language = language,
+            extensionVersion = extensionVersion,
+        )
+    }
 
 class CloudCheckClient(
     private val transport: CloudTransport,
